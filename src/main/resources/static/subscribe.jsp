@@ -1,0 +1,568 @@
+<%
+  if(session.getAttribute("loginid")!=null);
+  out.println("<script>window.location.href='/trylogin.jsp'</script>");
+%>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <!-- 引入样式 -->
+  <link rel="stylesheet" href="css/mint-ui.css">
+</head>
+
+<body>
+<div id = 'app'>
+  <mt-header title="自选配置">
+  </mt-header>
+  
+  <!--choose what customer want-->
+  <!--内核数量-->
+  <div> 
+    <span class="mint-header--bk">内核数量（core）</mt-header> 
+  </div>   
+    <div class="mint-cell-value" @click="handleClick1">  
+    <input placeholder="请选择内核数量" type="text" readonly="readonly" class="mint-button--flarge" v-model="value1">  
+    </div>  
+  <div class="popup">        
+	<mt-popup v-model="popupVisible1" position="bottom" class="mint-popup-4">
+		<div class="picker-toolbar">  
+			<span float:left class="mint-datetime-action mint-datetime-cancel" @click="cancel1">取消</span>  
+			<span float:right class="mint-datetime-action mint-datetime-confirm" @click="select1">确定</span>  
+		</div>  
+		<mt-picker :slots="slots1"  @change="change1" :visible-item-count="5" >
+		</mt-picker>    
+	</mt-popup>
+  </div>
+
+  <!--内存-->
+  <div> 
+    <span class="mint-header--bk">内存大小（GB）</mt-header> 
+  </div>   
+  <div class="mint-cell-value" @click="handleClick2">  
+    <input placeholder="请选择内存大小" type="text" readonly="readonly" class="mint-button--flarge" v-model="value2">  
+  </div>  
+  <div class="popup">        
+	<mt-popup v-model="popupVisible2" position="bottom" class="mint-popup-4">
+		<div class="picker-toolbar">  
+			<span float:left class="mint-datetime-action mint-datetime-cancel" @click="cancel2">取消</span>  
+			<span float:right class="mint-datetime-action mint-datetime-confirm" @click="select2">确定</span>  
+		</div>  
+		<mt-picker :slots="slots2"  @change="change2" :visible-item-count="5" ></mt-picker>    
+    </mt-popup>
+  </div>
+  
+  <!--存储-->
+  <div> 
+    <span class="mint-header--bk">存储方式</mt-header> 
+  </div>   
+  <div class="mint-cell-value" @click="handleClick3">  
+    <input placeholder="请选择存储方式" type="text" readonly="readonly" class="mint-button--flarge" v-model="value3">  
+  </div>  
+  <div class="popup">        
+	<mt-popup v-model="popupVisible3" position="bottom" class="mint-popup-4">
+		<div class="picker-toolbar">  
+			<span float:left class="mint-datetime-action mint-datetime-cancel" @click="cancel3">取消</span>  
+			<span float:right class="mint-datetime-action mint-datetime-confirm" @click="select3">确定</span>  
+		</div>  
+		<mt-picker :slots="slots3"  @change="change3" :visible-item-count="5" ></mt-picker>
+	</mt-popup>
+  </div>
+
+  <!--网络-->
+  <div> 
+    <span class="mint-header--bk">网络</mt-header> 
+  </div>   
+  <div class="mint-cell-value" @click="handleClick4">  
+    <input placeholder="请选择网络带宽" type="text" readonly="readonly" class="mint-button--flarge" v-model="value4">  
+  </div>  
+  <div class="popup">        
+	<mt-popup v-model="popupVisible4" position="bottom" class="mint-popup-4">
+		<div class="picker-toolbar">  
+			<span float:left class="mint-datetime-action mint-datetime-cancel" @click="cancel4">取消</span>  
+			<span float:right class="mint-datetime-action mint-datetime-confirm" @click="select4">确定</span>  
+		</div>  
+		<mt-picker :slots="slots4"  @change="change4" :visible-item-count="5" ></mt-picker>
+    </mt-popup>
+  </div>
+
+  <!--虚拟级备份-->
+  <div> 
+    <span class="mint-header--bk">是否需要虚拟级备份</mt-header> 
+  </div>   
+  <div class="mint-cell-value" @click="handleClick5">  
+    <input placeholder="请选择是否需要虚拟级备份" type="text" readonly="readonly" class="mint-button--flarge" v-model="value5">  
+  </div>  
+  <div class="popup">        
+		<mt-popup v-model="popupVisible5" position="bottom" class="mint-popup-4">
+			<div class="picker-toolbar">  
+				<span float:left class="mint-datetime-action mint-datetime-cancel" @click="cancel5">取消</span>  
+				<span float:right class="mint-datetime-action mint-datetime-confirm" @click="select5">确定</span>  
+			</div>  
+		<mt-picker :slots="slots5"  @change="change5" :visible-item-count="5" ></mt-picker>
+		</mt-popup>
+  </div>
+
+  <!--choose what customer want-->
+  <!--内核数量-->
+  <div> 
+    <span class="mint-header--bk">时间（月）</mt-header> 
+  </div>   
+    <div class="mint-cell-value" @click="handleClick6">  
+    <input placeholder="请选择时间" type="text" readonly="readonly" class="mint-button--flarge" v-model="value6">  
+    </div>  
+  <div class="popup">        
+	<mt-popup v-model="popupVisible6" position="bottom" class="mint-popup-4">
+		<div class="picker-toolbar">  
+			<span float:left class="mint-datetime-action mint-datetime-cancel" @click="cancel6">取消</span>  
+			<span float:right class="mint-datetime-action mint-datetime-confirm" @click="select6">确定</span>  
+		</div>  
+		<mt-picker :slots="slots6"  @change="change6" :visible-item-count="5" >
+		</mt-picker>    
+	</mt-popup>
+  </div>
+
+
+
+<!--提交订单!!!!-->
+<div>
+ <mt-cell title="价格（元）：">{{totalPrice}}</mt-cell>
+</div>
+<div>
+ <router-link to="/" >         
+<mt-button type="default" class="mint-button--large" @click.native = 'show'>提交订单</mt-button> 
+</router-link>
+<mt-popup
+v-model="popupVisible7" position="top" class="mint-popup-4" >请选择内核数量！
+</mt-popup>
+<mt-popup
+v-model="popupVisible8" position="top" class="mint-popup-4" >请选择内存大小！
+</mt-popup>
+<mt-popup
+v-model="popupVisible9" position="top" class="mint-popup-4" >请选择存储方式！
+</mt-popup>
+<mt-popup
+v-model="popupVisible10" position="top" class="mint-popup-4" >请选择网络带宽！
+</mt-popup>
+<mt-popup
+v-model="popupVisible11" position="top" class="mint-popup-4" >请选择是否需要虚拟级备份！
+</mt-popup>
+<mt-popup
+v-model="popupVisible12" position="top" class="mint-popup-4" >请选择时间！
+</mt-popup>
+<mt-popup
+v-model="popupVisible13" position="right" class="mint-popup-5" >
+<div>
+    <mt-header title="配置确认">
+        <router-link to="/" slot="left">
+          <mt-button icon="back" @click.native = 'back'>返回</mt-button>  
+        </router-link>     
+    </mt-header>
+    <mt-cell title="内核数量（core）">{{value1}}</mt-cell>
+    <mt-cell title="内存大小(GB)">{{value2}}</mt-cell>
+    <mt-cell title="存储方式">{{value3}}</mt-cell>
+    <mt-cell title="网络带宽">{{value4}}</mt-cell>
+    <mt-cell title="是否需要虚拟级备份">{{value5}}</mt-cell>
+    <mt-cell title="时间（月）">{{value6}}</mt-cell>
+    <div position="bottom">
+    <mt-button type="danger" class="mint-button--blarge" @click.native = 'addToServer'>确认订单</mt-button>  
+    </div>   
+<div>
+</mt-popup>
+</div>
+</div>
+
+<!--JS CODE START-->
+</body>
+<script src='js/fetch.js'></script>
+<script src='js/axios.js'></script>
+<!-- 先引入 Vue -->
+<script src="js/vue.js"></script>
+<!-- 引入组件库 -->
+<script src="js/mint-ui.js"></script>
+<script src="js/jquery-2.1.4.min.js"></script>
+<script type="text/javascript">
+
+  var app = new Vue({
+    el: '#app',
+    data: {
+	  <!--temp value->
+      resource_id: 0,
+      amount: 0,
+      resource_tp: 0,
+      rs_sub_tp: 0,
+	    priceList:[0,0,0,0,0],
+	    totalPrice:0,
+      <!--DISPLAY DATA-->
+      value1:'',
+      value2:'',
+      value3:'',
+      value4:'',
+	  value5:'',
+      value6:1,
+      pre1:'',
+      pre2:'',
+      pre3:'',
+      pre4:'',
+      pre5:'',
+      pre6:'',
+      popupVisible1:false,
+      popupVisible2:false,
+      popupVisible3: false,
+      popupVisible4: false,
+	    popupVisible5: false,
+      popupVisible6: false,
+      popupVisible7: false,
+      popupVisible8: false,
+      popupVisible9: false,
+      popupVisible10: false,
+      popupVisible11: false,
+      popupVisible12: false,
+      popupVisible13: false,
+      slots1:[{values:['1', '2', '3', '4', '5', '6']}],
+      slots2:[{values:['8', '16', '32', '64', '128', '256']}],
+      slots3:[{values:['标准', '高性能', '磁带']}],
+      slots4:[{values:['固定带宽2M', '固定带宽4M', '固定带宽5M', '固定带宽8M', '固定带宽10M']}],
+	    slots5:[{values:['是','否']}],
+      slots6:[{values:['1', '3', '6','12']}],
+		 <!--订单数据 -->
+      orderdata:{
+      ordernum: '',
+      custid: '',
+      loginid: '',
+      orderduration: 0,
+      price: 0,
+	  <!--虚拟机2个必选，存储，网络，备份采用加进来的方式-->
+      orderiteminfolist: [{resourceid:101,amount:1},{resourceid:102,amount:8},{resourceid:201,amount:1},{resourceid:301,amount:1}]
+    },
+		   <!--资源数据 -->
+    resourceList: [
+      {
+        resource_id: 101,
+        resource_tp: '内核数量',
+        rs_sub_tp: '内核数量',
+        price: 96,
+        unit: '元/月'
+      },
+      {
+        resource_id: 102,
+        resource_tp: '内存',
+        rs_sub_tp: '内存',
+        price: 24,
+        unit: '元/月'
+      },
+      {
+        resource_id: 201,
+        resource_tp: '存储',
+        rs_sub_tp: '标准',
+        price: 0.4,
+        unit: '元/月'
+      },
+      {
+        resource_id: 202,
+        resource_tp: '存储',
+        rs_sub_tp: '高性能',
+        price: 1.2,
+        unit: '元/月'
+      },
+      {
+        resource_id: 203,
+        resource_tp: '存储',
+        rs_sub_tp: '磁带',
+        price: 250,
+        unit: '元/月/台'
+      },
+      {
+        resource_id: 301,
+        resource_tp: '网络',
+        rs_sub_tp: '固定带宽2M',
+        price: 120,
+        unit: '元/月'
+      },
+      {
+        resource_id: 302,
+        resource_tp: '网络',
+        rs_sub_tp: '固定带宽4M',
+        price: 240,
+        unit: '元/月'
+      },
+      {
+        resource_id: 303,
+        resource_tp: '网络',
+        rs_sub_tp: '固定带宽5M',
+        price: 300,
+        unit: '元/月'
+      },
+      {
+        resource_id: 304,
+        resource_tp: '网络',
+        rs_sub_tp: '固定带宽8M',
+        price: 456,
+        unit: '元/月'
+      },
+      {
+        resource_id: 305,
+        resource_tp: '网络',
+        rs_sub_tp: '固定带宽10M',
+        price: 550,
+        unit: '元/月'
+      },
+      {
+        resource_id: 401,
+        resource_tp: '备份',
+        rs_sub_tp: '虚拟级备份',
+        price: 2.25,
+        unit: '元/月/G'
+      }
+    ]
+    },
+  methods: {
+    show: function() { 
+      if(!this.value1){this.popupVisible7=true;} 
+      else if(!this.value2){this.popupVisible8=true;} 
+      else if(!this.value3){this.popupVisible9=true;} 
+      else if(!this.value4){this.popupVisible10=true;} 
+      else if(!this.value5){this.popupVisible11=true;} 
+      else if(!this.value6){this.popupVisible12=true;}
+      else this.popupVisible13=true;     
+//      console.log(JSON.stringify(this.orderdata))
+    },
+    gen_order_num:  function() {
+      order_num = this.orderdata.custid + this.orderdata.loginid + this.getdate();
+      console.log(order_num);
+      this.orderdata.ordernum = order_num;
+	  this.orderdata.price = this.totalPrice;
+	  this.orderdata.orderduration = this.value6;
+    },
+    addItem: function(resource_tp, rs_sub_tp) {
+      this.orderdata.orderiteminfolist.push(
+        {
+          resourceid: this.popCode(resource_tp, rs_sub_tp),
+          amount: this.amount
+        });
+      this.show();
+//      this.gen_order_num();
+    },
+    getdate: function() {
+      var date = new Date();
+      Y = date.getFullYear(), m = date.getMonth() + 1, d = date.getDate(), H = date.getHours(), i = date.getMinutes(), s = date.getSeconds();
+      if (m < 10) { m = '0' + m; }
+      if (d < 10) { d = '0' + d; }
+      if (H < 10) { H = '0' + H; }
+      if (i < 10) { i = '0' + i; }
+      if (s < 10) { s = '0' + s; }
+      var t = Y + m + d;
+      return t;
+    },
+    popCode: function(resource_tp, rs_sub_tp) {
+      for (var i = 0; i < 11; i++) {
+        var resource = this.resourceList[i];
+        if (resource.resource_tp === resource_tp && resource.rs_sub_tp === rs_sub_tp) {
+          console.log(resource.resource_id);
+          return [resource.resource_id,resource.price];
+        }
+      }
+    },
+    addToServer: function() {
+      this.gen_order_num();
+	  console.log(JSON.stringify(this.orderdata));
+      $.ajax({
+        type: "POST",
+        url: "/saveorder",
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify(this.orderdata),
+        dataType: "json",
+        success: function (message) {
+          if (message.code == 200) {
+            alert("下单成功，敬待完工");
+          }
+          else
+          {
+                alert(message.message);
+           }
+        },
+        error: function (message) {
+          $("#request-process-patent").html("提交数据失败！");
+        }
+      });
+    },
+	<!--set values cpu:0,memory:1,storage:2,web:3,backup:4-->
+	setCPU: function(id,resource_tp,rs_sub_tp,amount) {
+	    var resource = this.orderdata.orderiteminfolist[id];
+		var price = 0;
+		[resource.resourceid,price]=this.popCode(resource_tp,rs_sub_tp);
+		resource.amount=amount;
+		this.alterPrice(id,price*amount);
+	},
+	setMemory: function(id,resource_tp,rs_sub_tp,amount) {
+		var resource = this.orderdata.orderiteminfolist[id];
+		var price = 0;
+		var re =this.popCode(resource_tp,rs_sub_tp);
+		resource.resourceid=re[0];
+		price=re[1];
+		console.log(resource+" "+price+" "+amount+" " +price*amount)
+		this.alterPrice(id,price*amount);
+	},
+	setStorage: function(id,resource_tp,rs_sub_tp,amount) {
+		var resource = this.orderdata.orderiteminfolist[id];
+		var price = 0;
+		var re =this.popCode(resource_tp,rs_sub_tp);
+		resource.resourceid=re[0];
+		price=re[1];
+		console.log(resource+" "+price+" "+amount+" " +price*amount)
+		this.alterPrice(id,price);
+	},
+	setWeb: function(id,resource_tp,rs_sub_tp,amount) {
+		var resource = this.orderdata.orderiteminfolist[id];
+		var price = 0;
+		var re =this.popCode(resource_tp,rs_sub_tp);
+		resource.resourceid=re[0];
+		price=re[1];
+		console.log(resource+" "+price+" "+amount+" " +price*amount)
+		this.alterPrice(id,price);
+	},
+	alterBackup: function(ifChoose) {
+		var resourceList = this.orderdata.orderiteminfolist;
+		var resource = '401';
+		if(ifChoose) {
+		    if(resourceList.length === 4) {resourceList.push({resourceid:resource,amount:1});}
+		} else if (resourceList.length > 4){
+			resourceList.splice(resourceList.length-1,1);
+		}
+	},
+	<!--alter price>
+	alterPrice: function(id,price) {
+		this.priceList[id] = price;
+		totalprice = 0;
+		for(var i = 0; i < this.priceList.length; i++) {
+			totalprice += this.priceList[i];
+		}
+		var month=1;
+		if(this.value6>0) month=this.value6;
+		this.totalPrice = totalprice*month;
+	},
+	alterPrice1: function(month) {
+		this.totalPrice = 0;
+		totalprice = 0;
+		for(var i = 0; i < this.priceList.length; i++) {
+			totalprice += this.priceList[i];
+		}
+		this.totalPrice = totalprice * month;
+	},
+	<!--display function-->
+    handleClick1:function(){
+      this.popupVisible1 = true;  
+    },
+    handleClick2:function(){
+      this.popupVisible2 = true;  
+    },
+    handleClick3:function(){
+      this.popupVisible3 = true;  
+    },
+    handleClick4:function(){
+      this.popupVisible4 = true; 
+    },
+	  handleClick5:function(){
+      this.popupVisible5 = true; 
+    },
+    handleClick6:function(){
+      this.popupVisible6 = true; 
+    },
+    change1(picker, values) {
+      this.pre1=this.value1;
+      this.value1 = values[0];
+      console.log(this.value1)    
+    }, 
+    change2(picker, values) {
+      this.pre2=this.value2;
+      this.value2 = values[0];  
+      console.log(this.value2)    
+    }, 
+    change3(picker, values) {
+      this.pre3=this.value3;
+      this.value3 = values[0]; 
+      console.log(this.value3)    
+    }, 
+    change4(picker, values) {
+      this.pre4=this.value4;
+      this.value4 = values[0]; 
+      console.log(this.value4)    
+    }, 
+	  change5(picker, values) {
+      this.pre5=this.value5;
+      this.value5 = values[0]; 
+      console.log(this.value5)
+    }, 
+    change6(picker, values) {
+      this.pre6=this.value6;
+      this.value6 = values[0]; 
+      console.log(this.value6)
+    }, 
+    select1: function () {  
+      this.popupVisible1 = false;
+	  this.setCPU(0,'内核数量','内核数量',this.value1);
+    }, 
+    select2: function () {  
+      this.popupVisible2 = false;
+	  this.setMemory(1,'内存','内存',this.value2);
+    },
+    select3: function () {  
+      this.popupVisible3 = false;
+	  this.setStorage(2,'存储',this.value3,this.value3);
+    },
+    select4: function () {  
+      this.popupVisible4 = false;
+	  console.log('网络:'+ this.value4);
+	  this.setWeb(3,'网络',this.value4,this.value4);
+    },
+    select5: function () {
+      this.popupVisible5 = false;
+	  console.log('备份:'+ this.value5);
+	  this.alterBackup(true);
+    },
+    select6: function () {  
+      this.popupVisible6 = false;
+	  this.alterPrice1(this.value6);
+    },
+    cancel1: function () {  
+      this.popupVisible1 = false
+      this.value1=this.pre1;     
+      this.setCPU(0,'内核数量','内核数量',this.value1);
+    },
+    cancel2: function () {  
+      this.popupVisible2 = false
+      this.value2=this.pre2;
+      this.setMemory(1,'内存','内存',this.value2);
+    },
+    cancel3: function () {  
+      this.popupVisible3 = false
+      this.value3=this.pre3; 
+      this.setStorage(2,'存储',this.value3,this.value3);
+    },
+    cancel4: function () {  
+      this.popupVisible4 = false
+      this.value4=this.pre4; 
+      this.setWeb(3,'网络',this.value4,this.value4);
+    },
+	cancel5: function () {  
+      this.popupVisible5 = false
+      this.value5=this.pre5;
+	  console.log('备份:'+ this.value5);
+	  this.alterBackup(false);
+    },
+    cancel6: function () {
+      this.popupVisible6 = false
+      this.value6=this.pre6
+    },
+    back: function (){
+      this.popupVisible13 = false
+    },
+    confirm: function (){
+      
+    }
+  }
+})
+
+</script>
+
+</html>

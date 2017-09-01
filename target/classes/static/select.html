@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name = "viewport" content = "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="css/mint-ui1.css">
+
+    <script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="js/common.js"></script>
+    <style type="text/css">
+
+</style>
+</head>
+<body>
+<div id = 'app' style = 'height: 100px;'>
+    <mt-header title="选择产品"></mt-header>
+    
+    <mt-swipe :auto="4000">
+        <mt-swipe-item><img src="images/1.jpg"  /></mt-swipe-item>
+        <mt-swipe-item><img src="images/2.jpg"  /></mt-swipe-item>
+        <mt-swipe-item><img src="images/3.jpg"  /></mt-swipe-item>
+    </mt-swipe>
+	<div class="location">	
+<mt-cell to="./server.html" title="云主机"  is-link></mt-cell>
+<mt-cell title="云路由器"  is-link></mt-cell>
+<mt-cell title="云防火墙"  is-link></mt-cell>
+<mt-cell title="云负载均衡"  is-link></mt-cell>
+<mt-cell title="云连接"  is-link></mt-cell>
+<mt-cell title="云上网"  is-link></mt-cell>
+<mt-cell title="云数据库"  is-link></mt-cell>
+</div>
+</div>
+
+
+
+
+
+</body>
+<script src="js/vue.js"></script>
+<script src="js/mint-ui.js"></script>
+<script type="text/javascript">
+  new Vue({
+    el: '#app',
+    data: {
+        active: 'tab-container1'
+    },
+    methods: {
+      handleClick: function() {
+        this.$toast('Hello world!')
+      }
+    }
+  })
+  </script>
+</html>

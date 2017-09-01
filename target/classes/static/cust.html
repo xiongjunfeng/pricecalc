@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <!-- 引入样式 -->
+  <link rel="stylesheet" href="css/mint-ui-v2.css">
+</head>
+
+<body>
+<div id = 'app'>
+    <mt-header title="客户信息录入">
+        <router-link to="/" slot="left">
+          <mt-button icon="back" @click.native = 'back'>返回</mt-button>  
+        </router-link>     
+</mt-header>
+
+<mt-field label="姓名" placeholder="请输入姓名"  v-model="custname"></mt-field>
+<mt-field label="性别" placeholder="请输入性别" v-model="gender" value="男">男</mt-field>
+<mt-field label="手机号" placeholder="请输入手机号" type="tel" v-model="phone"></mt-field>
+<mt-field label="工作" placeholder="请输入工作"  v-model="work"></mt-field>
+<mt-field label="地址" placeholder="请输入地址"  v-model="area"></mt-field>
+<mt-field label="生日" placeholder="请输入生日" type="date" v-model="birthday"></mt-field>
+<div class="mint-button--blarge">
+<router-link to="/" slot="left">
+<mt-button type="danger" class="mint-button--blarge" @click.native = 'confirm'>提交</mt-button>
+</router-link>
+
+</div>
+</div>
+
+<!--JS CODE START-->
+</body>
+<script src='js/fetch.js'></script>
+<script src='js/axios.js'></script>
+<!-- 先引入 Vue -->
+<script src="js/vue.js"></script>
+<!-- 引入组件库 -->
+<script src="js/mint-ui.js"></script>
+<script src="js/jquery-2.1.4.min.js"></script>
+<script type="text/javascript">
+
+    new Vue({
+    el: '#app',
+    data: {
+	  <!--temp value->
+      custid:'',
+      custname:'',
+      gender:'',
+      phone:'',
+      work:'',
+      area:'',
+      birthday:'',
+      createby:'', 
+    },
+    methods: {
+      confirm:function(){
+	    this.gen_custid();
+		console.log(window.localStorage);
+        $.ajax({
+          type: "POST",
+          url: "/saveCustInfo",
+          contentType: "application/json; charset=utf-8",
+          data: JSON.stringify({custid:this.custid,custname:this.custname,gender:this.gender,phone:this.phone,work:this.work,area:this.area,birthday:this.birthday,createby:this.createby}),
+          dataType: "json",
+          success: function (message) {
+            if (message > 0) {
+              alert("提交成功，准备跳转");
+            }
+          },
+          error: function (message) {
+            $("#request-process-patent").html("提交数据失败！");
+          }
+        });
+		this.subclick();
+      },
+	  gen_custid: function() {
+		 this.custid = this.uuid();
+		 console.log(this.custid);
+	  },
+	  uuid: function() {
+         var s = [];
+         var hexDigits = "0123456789abcdef";
+         for (var i = 0; i < 36; i++) {
+             s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+         }
+         s[14] = "4";  // bits 12-15 of the time_hi_and_version field to 0010
+         s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1);  // bits 6-7 of the clock_seq_hi_and_reserved to 01
+         s[8] = s[13] = s[18] = s[23] = "-";
+         
+         var uuid = s.join("");
+         return uuid;
+	  },
+	  subclick:function() {
+		 window.localStorage.cust=JSON.stringify({custid:this.custid,custname:this.custname});
+		 window.localStorage.ordernum = this.custid;
+		console.log(window.localStorage);
+         document.location.href="./confirm.html";
+      },
+	  back: function (){
+        document.location.href="./server.html";
+      },
+}})
+
+</script>
+
+</html>

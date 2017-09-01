@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="sale">
+<head>
+    <meta charset="UTF-8">
+    <title>杭州房价监控</title>
+    <link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css"/>
+</head>
+<body>
+
+<div class="container-fluid container" ng-controller="saleController">
+
+    <div class="row" style="margin-top: 50px;">
+        <form class="form-inline">
+            <div class="form-group">
+                <label>楼盘名称</label>
+                <input type="text" class="form-control" ng-model="house"><!--双向绑定-->
+            </div>
+            <div class="form-group">
+                <label>查看最近几天的销售情况</label>
+                <input type="text" class="form-control" ng-model="offset">
+            </div>
+            <button type="submit" class="btn btn-default" ng-click="query()">查询</button>
+        </form>
+    </div>
+
+    <div class="row" style="margin-top: 50px;">
+        <table class="table table-striped">
+            <tr>
+                <td>日期</td>
+                <td>平均价格</td>
+            </tr>
+            <tr ng-repeat="sale in sales">
+                <td ng-bind="sale.createDate"></td><!--ng为angular.js标志，ng-repeat是一个循环-->
+                <td ng-bind="sale.price"></td>
+            </tr>
+        </table>
+    </div>
+
+</div>
+
+<script type="application/javascript" src="vendor/jquery.min.js"></script>
+<script type="application/javascript" src="vendor/bootstrap/js/bootstrap.min.js"></script>
+<script type="application/javascript" src="vendor/angular/angular.min.js"></script>
+<script type="application/javascript" src="vendor/angular/angular-resource.min.js"></script>
+
+<script type="application/javascript" src="script/sale.js"></script>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="css/mint-ui-v2.css">
+</head>
+
+<body>
+<div id = 'app'>
+    <mt-header title="订单信息确认">
+        <router-link to="/" slot="left">
+            <mt-button icon="back" @click.native = 'back'>返回</mt-button>
+        </router-link>
+    </mt-header>
+    <mt-cell class="mint-cell-value1" title="订单号">{{ordernum}}</mt-cell>
+    <mt-cell class="mint-cell-value1" title="客户号">{{custid}}</mt-cell>
+    <mt-cell class="mint-cell-value1" title="客户姓名">{{custname}}</mt-cell>
+    <mt-cell class="mint-cell-value1" title="内核金额（元）">{{value1}}</mt-cell>
+    <mt-cell class="mint-cell-value1" title="内存金额（元）">{{value2}}</mt-cell>
+    <mt-cell class="mint-cell-value1" title="存储金额（元）">{{value3}}</mt-cell>
+    <mt-cell class="mint-cell-value1" title="网络带宽金额（元）">{{value4}}</mt-cell>
+    <mt-cell class="mint-cell-value1" title="备份金额（元）">{{value5}}</mt-cell>
+    <mt-cell class="mint-cell-value1" title="时间（月）">{{value6}}</mt-cell>
+    <mt-cell class="mint-cell-value1" title="总价格（元）：">{{totalPrice}}</mt-cell>
+
+    <div class="mint-button--blarge">
+        <router-link to="/" slot="left">
+            <mt-button type="danger" class="mint-button--blarge" @click.native = 'confirm'>提交订单</mt-button>
+        </router-link>
+    </div>
+</div>
+
+<!--JS CODE START-->
+</body>
+<script src='js/fetch.js'></script>
+<script src='js/axios.js'></script>
+<!-- 先引入 Vue -->
+<script src="js/vue.js"></script>
+<!-- 引入组件库 -->
+<script src="js/mint-ui.js"></script>
+<script src="js/jquery-2.1.4.min.js"></script>
+<script type="text/javascript">
+
+    new Vue({
+    el: '#app',
+    data: {
+		orderdata:{},
+		ordernum:JSON.parse(window.localStorage.cust).custid,
+        custid:JSON.parse(window.localStorage.cust).custid,
+        custname:JSON.parse(window.localStorage.cust).custname,
+        value1:window.localStorage.price1,
+        value2:window.localStorage.price2,
+        value3:window.localStorage.price3,
+        value4:window.localStorage.price4,
+        value5:window.localStorage.price5,
+        value6:window.localStorage.value6,
+        totalPrice:window.localStorage.totalPrice
+    },
+
+    methods: {
+	  gen_order() {
+		this.orderdata.ordernum = 'hjk';
+	  },
+	  confirm() {
+		this.orderdata = JSON.parse(window.localStorage.orderdata);
+		this.orderdata.ordernum = JSON.parse(window.localStorage.cust).custid;
+		this.orderdata.custid = JSON.parse(window.localStorage.cust).custid;
+		this.orderdata.loginid = window.localStorage.loginid;
+		this.addServer();
+		alert("操作成功，回到首页");
+		this.subclick();
+	  },
+      addServer:function(){
+	    console.log(JSON.stringify(this.orderdata));
+        $.ajax({
+          type: "POST",
+          url: "/saveorder",
+          contentType: "application/json; charset=utf-8",
+          data: JSON.stringify(this.orderdata),
+          dataType: "json",
+          success: function (message) {
+            if (message.code == 200) {
+			  document.location.href='select.html';
+			  Toast({
+                message: '操作成功，回到首页',
+                iconClass: 'icon icon-success'
+              });
+            }
+          },
+          error: function (message) {
+            $("#request-process-patent").html("提交数据失败！");
+          }
+        });
+      },
+   subclick: function() {
+		document.location.href="./select.html";
+	},
+		back:function() {
+			document.location.href="./cust.html";
+		}
+    }})
+
+</script>
+
+</html>
